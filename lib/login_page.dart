@@ -13,10 +13,29 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
   bool isLogin = true;
 
   Future<void> handleAuth() async {
     try {
+      if (!isLogin && passwordController.text != confirmPasswordController.text) {
+        // Check if passwords match when registering
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: const Text('Error'),
+            content: const Text('Passwords do not match.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
+
       if (isLogin) {
         // LOGIN
         await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -85,6 +104,14 @@ class _LoginPageState extends State<LoginPage> {
                 obscureText: true,
                 decoration: const InputDecoration(labelText: 'Password'),
               ),
+              if (!isLogin) ...[
+                const SizedBox(height: 10),
+                TextField(
+                  controller: confirmPasswordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(labelText: 'Confirm Password'),
+                ),
+              ],
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: handleAuth,
