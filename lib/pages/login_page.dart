@@ -19,7 +19,6 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> handleAuth() async {
     try {
       if (!isLogin && passwordController.text != confirmPasswordController.text) {
-        // Check if passwords match when registering
         showDialog(
           context: context,
           builder: (_) => AlertDialog(

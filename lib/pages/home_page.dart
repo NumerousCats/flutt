@@ -1,6 +1,6 @@
+import 'package:fac/pages/students_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'login_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -11,28 +11,21 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: Text('Welcome ${user?.email ?? "User"}'),
         actions: [
           IconButton(
             onPressed: () async {
               await FirebaseAuth.instance.signOut();
               if (context.mounted) {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => const LoginPage()),
-                );
+                Navigator.pushReplacementNamed(context, '/login');
               }
             },
             icon: const Icon(Icons.logout),
           ),
         ],
       ),
-      body: Center(
-        child: Text(
-          'Welcome, ${user?.email ?? "User"}',
-          style: const TextStyle(fontSize: 20),
-        ),
-      ),
+
+      body: const StudentsListPage(),
     );
   }
 }
